@@ -1,4 +1,4 @@
-# Netflix Movies
+# Exploring Airbnb Market Trends
 Welcome to New York City, one of the most-visited cities in the world. There are many Airbnb listings in New York City for travelers, which can be anywhere between a few nights to many months. In this project, we will take a closer look at the New York Airbnb market by combining data from multiple file types like .csv, .tsv, and .xlsx.
 
 Recall that CSV, TSV, and Excel files are three common formats for storing data. Three files containing data on 2019 Airbnb listings are available to you:
