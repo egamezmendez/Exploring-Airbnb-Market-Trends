@@ -1,20 +1,20 @@
-# Import packages 
-import os # confirm file path/structure       
-import numpy as np
-import pandas as pd 
+# Netflix Movies
+Welcome to New York City, one of the most-visited cities in the world. There are many Airbnb listings in New York City for travelers, which can be anywhere between a few nights to many months. In this project, we will take a closer look at the New York Airbnb market by combining data from multiple file types like .csv, .tsv, and .xlsx.
 
-# List files in the Kaggle input directory
-for dirname, _, filenames in os.walk('/kaggle/input/'):
-    for filename in filenames:
-        print(os.path.join(dirname, filename))
+Recall that CSV, TSV, and Excel files are three common formats for storing data. Three files containing data on 2019 Airbnb listings are available to you:
 
+data/airbnb_price.csv This is a CSV file containing data on Airbnb listing prices and locations.
 
+listing_id: unique identifier of listing
+price: nightly listing price in USD
+nbhood_full: name of borough and neighborhood where listing is located
+data/airbnb_room_type.xlsx This is an Excel file containing data on Airbnb listing descriptions and room types.
 
-# Import CSV for prices
-airbnb_price = pd.read_csv('/kaggle/input/nyc-market-trends/workspace/data/airbnb_price.csv')
+listing_id: unique identifier of listing
+description: listing description
+room_type: Airbnb has three types of rooms: shared rooms, private rooms, and entire homes/apartments
+data/airbnb_last_review.tsv This is a TSV file containing data on Airbnb host names and review dates.
 
-# Import Excel file for room types
-airbnb_room_type = pd.read_excel('/kaggle/input/nyc-market-trends/workspace/data/airbnb_room_type.xlsx')
-
-# Import TSV for review dates. Specify sep or delimiter parameter. 
-airbnb_last_review = pd.read_csv('/kaggle/input/nyc-market-trends/workspace/data/airbnb_last_review.tsv', sep='\t')
+listing_id: unique identifier of listing
+host_name: name of listing host
+last_review: date when the listing was last reviewed
