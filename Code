@@ -1,49 +1,40 @@
-# Import pandas and matplotlib
-import pandas as pd
-import matplotlib.pyplot as plt
+# Import packages 
+import numpy as np
+import pandas as pd 
 
-# Create a DataFrame from the CSV file
-netflix_df = pd.read_csv('netflix_data.csv')
+# Import CSV for prices
+airbnb_price = pd.read_csv('data/airbnb_price.csv')
 
-# Subset netflix_df for movies only / save as netflix_subset
-netflix_subset = netflix_df[netflix_df['type'] == 'Movie']
+# Import Excel file for room types
+airbnb_room_type = pd.read_excel('data/airbnb_room_type.xlsx')
 
-# Subset netflix_subset only columns of interest / save as netflix_movies
-#title, country, genre, release year, duration 
-netflix_movies = netflix_subset [['title', 'country', 'genre', 'release_year', 'duration']]
+# Import TSV for review dates
+airbnb_last_review = pd.read_csv('data/airbnb_last_review.tsv', sep='\t')
 
-# Filter netflix_movies by duration < 60 minutes / save as short movies . 
-short_movies = netflix_movies [netflix_movies.duration < 60]
+# Join the three data frames together into one
+listings = pd.merge(airbnb_price, airbnb_room_type, on='listing_id')
+listings = pd.merge(listings, airbnb_last_review, on='listing_id')
 
-# Create empty list called colors
-colors = []
+# What are the dates of the earliest and most recent reviews?
+# To use a function like max()/min() on last_review date column, it needs to be converted to datetime type
+listings['last_review_date'] = pd.to_datetime(listings['last_review'], format='%B %d %Y')
+first_reviewed = listings['last_review_date'].min()
+last_reviewed = listings['last_review_date'].max()
 
-#iterate netflix_movies rows / append to colors
-for label, row in netflix_movies.iterrows(): #loop
-    if row ['genre'] == 'Children': 
-        colors.append('red')
-    elif row ['genre'] == 'Documentaries': 
-        colors.append ('blue')
-    elif row ['genre'] == 'Stand-Up': 
-        colors.append ('green')
-    else: 
-        colors.append ('black') #others
+# How many of the listings are private rooms?
+# Since there are differences in capitalization, make capitalization consistent
+listings['room_type'] = listings['room_type'].str.lower()
+private_room_count = listings[listings['room_type'] == 'private room'].shape[0]
 
-print (colors[:10])
+# What is the average listing price?
+# To convert price to numeric, remove " dollars" from each value
+listings['price_clean'] = listings['price'].str.replace(' dollars', '').astype(float)
+avg_price = listings['price_clean'].mean()
 
-#create a matplotlib figure object 
-fig = plt.figure(figsize = (12,8))
+review_dates = pd.DataFrame({
+    'first_reviewed': [first_reviewed],
+    'last_reviewed': [last_reviewed],
+    'nb_private_rooms': [private_room_count],
+    'avg_price': [round(avg_price, 2)]})
 
-#create scatter plot 
-plt.scatter(netflix_movies.release_year, netflix_movies.duration, c=colors)
-
-plt.title ('Movie Duration by Year of Release')
-plt.xlabel ('Release year')
-plt.ylabel ('Duration (min)')
-
-plt.show()
-
-answer = 'maybe'
-
-                    
-                      
+print(review_dates)
